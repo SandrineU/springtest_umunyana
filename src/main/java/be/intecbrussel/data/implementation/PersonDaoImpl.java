@@ -14,18 +14,11 @@ import java.util.List;
 
 public class PersonDaoImpl implements PersonDao {
 
-    private List<Person> personDB;
+    public static final List<Person> personDB = new ArrayList<>();
 
-    public PersonDaoImpl() {
-
-    }
 
     public Connection createConnection() throws SQLException {
         return ConnectionProvider.getInstance().getConnection();
-    }
-
-    public PersonDaoImpl(List<Person> personDB) {
-        this.personDB = personDB;
     }
 
     public List<Person> getPersonDB() throws CustomException, SQLException {
@@ -56,70 +49,37 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public boolean createPerson(Person createPerson) throws CustomException {
 
-        try (PreparedStatement preparedStatement = createConnection().prepareStatement("INSERT INTO person_db(first_name, last_name) " +
-                "VALUES (?,?)")) {
-
-            preparedStatement.setString(1, createPerson.getFirstName());
-            preparedStatement.setString(2, createPerson.getLastName());
-            preparedStatement.execute();
-
-        } catch (SQLException se) {
-            System.out.println(se.getMessage());
-            throw new CustomException("Something went wrong while creating a new Person");
+        if(!personDB.contains(createPerson)) {
+            personDB.add(createPerson);
+            System.out.printf("A new person was created: ", createPerson.getId());
+        }else{
+            System.out.printf("No new person was created: ", createPerson.getId());
         }
-        return false;
+        return personDB.contains(createPerson);
+
     }
 
     @Override
     public Person readPerson(int numberOfReadPeople) throws CustomException {
-        try (PreparedStatement preparedStatement =
-                     createConnection().prepareStatement("SELECT * FROM person where person_id=?")) {
-            preparedStatement.setInt(1, numberOfReadPeople);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                Person person = new Person();
-
-                if (resultSet.next()) {
-                    person.setId(resultSet.getInt("person_id"));
-                    person.setFirstName(resultSet.getString("first_name"));
-                    person.setLastName(resultSet.getString("last_name"));
-                    return person;
-                } else {
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw new CustomException();
-        }
+        return personDB.get(numberOfReadPeople);
     }
 
     @Override
     public boolean updatePerson(Person numberOfUpdatedPerson) throws CustomException {
-        try (PreparedStatement preparedStatement =
-                     createConnection().prepareStatement("UPDATE person SET person_lastName= ? where person_id=?")) {
-
-            preparedStatement.setString(1, numberOfUpdatedPerson.getLastName());
-            preparedStatement.setInt(2, numberOfUpdatedPerson.getId());
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException se) {
-            throw new CustomException();
+        if(personDB.contains(numberOfUpdatedPerson)){
+            int index = personDB.indexOf(numberOfUpdatedPerson);
+            System.out.printf("Person id-number " + numberOfUpdatedPerson.getId(),index);
+            return personDB.get(index).equals(numberOfUpdatedPerson);
+        } else{
+            System.out.println("Not available on the list.");
+            return false;
         }
-        return false;
+
     }
 
     @Override
     public boolean deletePerson(Person numberOfDeletedPerson) throws CustomException {
-        try (PreparedStatement preparedStatement =
-                     createConnection().prepareStatement("DELETE FROM person where person_id=?")) {
-
-            preparedStatement.setInt(1, numberOfDeletedPerson.getId());
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException se) {
-            throw new CustomException();
-        }
-        return false;
+        return personDB.remove(numberOfDeletedPerson);
     }
 
 }

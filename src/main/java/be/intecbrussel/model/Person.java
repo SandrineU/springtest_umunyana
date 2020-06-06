@@ -1,6 +1,7 @@
 package be.intecbrussel.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Person {
 
@@ -15,7 +16,7 @@ public class Person {
     public Person(String lastName, LocalDate dateOfBirth, int id, String firstName) {
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
-        this.id = id;
+        this.id = ++id;
         this.firstName = firstName;
     }
 
@@ -52,12 +53,25 @@ public class Person {
         this.firstName = firstName;
     }
 
-    public boolean equals (Object object){
-        return true;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, dateOfBirth);
     }
 
+    public boolean equals (Object object){
+        if (this == object) return true;
+        if (!(object instanceof Person)) return false;
+        //check properties values
+        Person person = (Person) object;
+        return id == person.id &&
+                Objects.equals(firstName, person.firstName) &&
+                Objects.equals(lastName, person.lastName) &&
+                Objects.equals(dateOfBirth, person.dateOfBirth);
+         }
+
     public int hashCode (int hashNumber){
-        return 0;
+        return Objects.hash(id, firstName, lastName, dateOfBirth);
     }
 
     @Override

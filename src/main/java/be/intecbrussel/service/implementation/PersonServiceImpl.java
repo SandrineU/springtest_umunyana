@@ -8,16 +8,13 @@ import be.intecbrussel.service.PersonService;
 
 import java.util.List;
 
-public class PersonServiceImpl implements PersonService<Person> {
+public class PersonServiceImpl implements PersonService {
 
     protected PersonDao personDao = new PersonDaoImpl();
 
-
     @Override
-    public List<Person> allPersons() throws CustomException {
-        return allPersons();
-
-        //not sure
+    public List<Person> getAllPersons() throws CustomException {
+        return PersonDaoImpl.personDB;
     }
 
     @Override
@@ -32,7 +29,9 @@ public class PersonServiceImpl implements PersonService<Person> {
 
     @Override
     public void addPersons(List<Person> personList) throws CustomException { ;
-    //how to write the correct method?
+        for (Person people : personList) {
+            personDao.createPerson(people);
+        }
     }
 
 
