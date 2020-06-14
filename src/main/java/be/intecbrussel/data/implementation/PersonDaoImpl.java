@@ -4,6 +4,8 @@ import be.intecbrussel.ConnectionProvider;
 import be.intecbrussel.CustomException;
 import be.intecbrussel.data.PersonDao;
 import be.intecbrussel.model.Person;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 
 public class PersonDaoImpl implements PersonDao {
 
-    public static final List<Person> personDB = new ArrayList<>();
+    private List<Person> personDB = new ArrayList<>();
 
 
     public Connection createConnection() throws SQLException {
@@ -23,26 +27,7 @@ public class PersonDaoImpl implements PersonDao {
 
     public List<Person> getPersonDB() throws CustomException, SQLException {
 
-        List<Person> personDB = new ArrayList<>();
-        try (PreparedStatement preparedStatement =
-                     createConnection().prepareStatement("SELECT * FROM person")) {
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Person person = new Person();
-                    person.setId(resultSet.getInt("person_id"));
-                    person.setLastName((resultSet.getString("person_LastName")));
-                    personDB.add(person);
-                }
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw new CustomException();
-        }
-
-    }
-        return personDB;
+        return new ArrayList<>(personDB);
     }
 
     //crud-methode geen duplicaten
@@ -52,24 +37,36 @@ public class PersonDaoImpl implements PersonDao {
         if(!personDB.contains(createPerson)) {
             personDB.add(createPerson);
             System.out.printf("A new person was created: ", createPerson.getId());
-        }else{
-            System.out.printf("No new person was created: ", createPerson.getId());
+        }else {
+            return false;
         }
-        return personDB.contains(createPerson);
-
+        return false;
     }
 
     @Override
     public Person readPerson(int numberOfReadPeople) throws CustomException {
-        return personDB.get(numberOfReadPeople);
+        Optional<Person> person = personDB.stream().filter(p -> p.getId() == numberOfReadPeople).findFirst();
+        if (person.isPresent()) {
+            return personDB.get(numberOfReadPeople);
+        } else {
+            return null;
+        }
+
     }
 
     @Override
     public boolean updatePerson(Person numberOfUpdatedPerson) throws CustomException {
-        if(personDB.contains(numberOfUpdatedPerson)){
+       if(personDB.contains(numberOfUpdatedPerson)){
             int index = personDB.indexOf(numberOfUpdatedPerson);
+            personDB.get(index).equals(numberOfUpdatedPerson);
             System.out.printf("Person id-number " + numberOfUpdatedPerson.getId(),index);
-            return personDB.get(index).equals(numberOfUpdatedPerson);
+            return true;
+
+       /* Here is another way to solve it. Jut don't forget to create the personExists method
+        if (personExists(person)) {
+            personDB.removeIf(person1 -> person1.getId() == person.getId());
+            personDB.add(person);
+            return true;*/
         } else{
             System.out.println("Not available on the list.");
             return false;
@@ -79,7 +76,13 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public boolean deletePerson(Person numberOfDeletedPerson) throws CustomException {
-        return personDB.remove(numberOfDeletedPerson);
+        if(personDB.contains(numberOfDeletedPerson)) {
+            personDB.remove(numberOfDeletedPerson);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 }

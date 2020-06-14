@@ -5,16 +5,23 @@ import be.intecbrussel.data.PersonDao;
 import be.intecbrussel.data.implementation.PersonDaoImpl;
 import be.intecbrussel.model.Person;
 import be.intecbrussel.service.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component("mockService")
 public class PersonServiceImpl implements PersonService {
 
-    protected PersonDao personDao = new PersonDaoImpl();
+    @Autowired
+    PersonDao personDao;
 
     @Override
     public List<Person> getAllPersons() throws CustomException {
-        return PersonDaoImpl.personDB;
+        PersonServiceImpl personService = null;
+        return personService.getAllPersons();
     }
 
     @Override
