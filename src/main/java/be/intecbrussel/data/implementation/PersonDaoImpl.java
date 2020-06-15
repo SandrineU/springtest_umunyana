@@ -6,6 +6,7 @@ import be.intecbrussel.data.PersonDao;
 import be.intecbrussel.model.Person;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,15 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
+@Component
 public class PersonDaoImpl implements PersonDao {
 
     private List<Person> personDB = new ArrayList<>();
-
-
-    public Connection createConnection() throws SQLException {
-        return ConnectionProvider.getInstance().getConnection();
-    }
 
     public List<Person> getPersonDB() throws CustomException, SQLException {
 
@@ -31,6 +27,7 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     //crud-methode geen duplicaten
+    @Bean
     @Override
     public boolean createPerson(Person createPerson) throws CustomException {
 
@@ -54,6 +51,7 @@ public class PersonDaoImpl implements PersonDao {
 
     }
 
+    @Bean
     @Override
     public boolean updatePerson(Person numberOfUpdatedPerson) throws CustomException {
        if(personDB.contains(numberOfUpdatedPerson)){

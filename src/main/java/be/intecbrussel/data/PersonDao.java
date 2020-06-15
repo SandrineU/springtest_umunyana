@@ -3,7 +3,6 @@ package be.intecbrussel.data;
 import be.intecbrussel.CustomException;
 import be.intecbrussel.model.Person;
 
-import java.util.List;
 
 public interface PersonDao {
 

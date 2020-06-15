@@ -2,26 +2,24 @@ package be.intecbrussel.service.implementation;
 
 import be.intecbrussel.CustomException;
 import be.intecbrussel.data.PersonDao;
-import be.intecbrussel.data.implementation.PersonDaoImpl;
 import be.intecbrussel.model.Person;
 import be.intecbrussel.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Component("mockService")
+@Component(value = "mockService")
 public class PersonServiceImpl implements PersonService {
 
     @Autowired
     PersonDao personDao;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<Person> getAllPersons() throws CustomException {
-        PersonServiceImpl personService = null;
-        return personService.getAllPersons();
+        return new ArrayList<Person>();
     }
 
     @Override

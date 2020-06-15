@@ -22,16 +22,16 @@ public class MainApp {
 
             PersonService service = context.getBean("mockService",PersonService.class);
 
-            Person guest1 = context.getBean("guest",Person.class);
+            Person guest1 = context.getBean("person",Person.class);
             guest1.setFirstName("Sando");
             guest1.setLastName("Uwi");
             guest1.setDateOfBirth(LocalDate.of(1991,6,15));
             service.addPerson(guest1);
             //other guests
-            Person guest2 = context.getBean("guest",Person.class);
+            Person guest2 = context.getBean("person",Person.class);
             guest2.setFirstName("Sandrine");
             guest2.setLastName("Umunyana");
-            Person guest3 = context.getBean("guest",Person.class);
+            Person guest3 = context.getBean("person",Person.class);
             guest3.setFirstName("Sandra");
             guest3.setLastName("Ana");
 
@@ -42,7 +42,7 @@ public class MainApp {
             service.addPersons(allGuests);
             service.getAllPersons().stream().forEach(System.out::println);
 
-            Person guest4 = context.getBean("guest",Person.class);
+            Person guest4 = context.getBean("person",Person.class);
             guest4.setFirstName("Johannah");
             guest4.setLastName("von Hunerbein");
             guest4.setDateOfBirth(LocalDate.of(1991,6,15));
