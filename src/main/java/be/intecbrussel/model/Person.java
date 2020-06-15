@@ -10,18 +10,15 @@ public class Person {
     private LocalDate dateOfBirth;
     private int id;
     private String firstName;
-    // what does the logger do?
-    private Logger logger;
 
-    public Person(Logger logger) {
-        this.logger=logger;
-        logger.info("create Person object with this id: "+ id);
+    public Person(int id) {
+        this.id = id;
     }
 
     public Person(String lastName, LocalDate dateOfBirth, int id, String firstName) {
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
-        this.id = ++id;
+        this.id = id++;
         this.firstName = firstName;
     }
 

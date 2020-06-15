@@ -1,6 +1,5 @@
 package be.intecbrussel.service.implementation;
 
-import be.intecbrussel.CustomException;
 import be.intecbrussel.data.PersonDao;
 import be.intecbrussel.model.Person;
 import be.intecbrussel.service.PersonService;
@@ -16,24 +15,23 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     PersonDao personDao;
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<Person> getAllPersons() throws CustomException {
+    public List<Person> getAllPersons(){
         return new ArrayList<Person>();
     }
 
     @Override
-    public Person getPerson(int numberOfPerson) throws CustomException {
+    public Person getPerson(int numberOfPerson) {
         return personDao.readPerson(numberOfPerson);
     }
 
     @Override
-    public void addPerson(Person newPerson) throws CustomException {
+    public void addPerson(Person newPerson) {
         personDao.createPerson(newPerson);
     }
 
     @Override
-    public void addPersons(List<Person> personList) throws CustomException { ;
+    public void addPersons(List<Person> personList){
         for (Person people : personList) {
             personDao.createPerson(people);
         }

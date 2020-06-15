@@ -1,47 +1,33 @@
 package be.intecbrussel.data.implementation;
 
-import be.intecbrussel.ConnectionProvider;
-import be.intecbrussel.CustomException;
 import be.intecbrussel.data.PersonDao;
 import be.intecbrussel.model.Person;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Component(value = "mockDao")
 public class PersonDaoImpl implements PersonDao {
 
     private List<Person> personDB = new ArrayList<>();
 
-    public List<Person> getPersonDB() throws CustomException, SQLException {
-
-        return new ArrayList<>(personDB);
-    }
-
     //crud-methode geen duplicaten
-    @Bean
     @Override
-    public boolean createPerson(Person createPerson) throws CustomException {
+    public boolean createPerson(Person createPerson) {
 
         if(!personDB.contains(createPerson)) {
-            personDB.add(createPerson);
             System.out.printf("A new person was created: ", createPerson.getId());
+            return true;
         }else {
-            return false;
+            personDB.add(createPerson);
         }
         return false;
     }
 
     @Override
-    public Person readPerson(int numberOfReadPeople) throws CustomException {
+    public Person readPerson(int numberOfReadPeople) {
         Optional<Person> person = personDB.stream().filter(p -> p.getId() == numberOfReadPeople).findFirst();
         if (person.isPresent()) {
             return personDB.get(numberOfReadPeople);
@@ -51,9 +37,8 @@ public class PersonDaoImpl implements PersonDao {
 
     }
 
-    @Bean
     @Override
-    public boolean updatePerson(Person numberOfUpdatedPerson) throws CustomException {
+    public boolean updatePerson(Person numberOfUpdatedPerson){
        if(personDB.contains(numberOfUpdatedPerson)){
             int index = personDB.indexOf(numberOfUpdatedPerson);
             personDB.get(index).equals(numberOfUpdatedPerson);
@@ -73,13 +58,19 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public boolean deletePerson(Person numberOfDeletedPerson) throws CustomException {
+    public boolean deletePerson(Person numberOfDeletedPerson)  {
         if(personDB.contains(numberOfDeletedPerson)) {
             personDB.remove(numberOfDeletedPerson);
             return true;
         } else {
             return false;
         }
+
+    }
+
+    @Override
+    public List<Person> getAllPersons(){
+        return personDB;
 
     }
 
