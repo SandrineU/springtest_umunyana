@@ -18,6 +18,7 @@ public class PersonDaoImpl implements PersonDao {
     public boolean createPerson(Person createPerson) {
 
         if(!personDB.contains(createPerson)) {
+            personDB.add(createPerson);
             System.out.printf("A new person was created: ", createPerson.getId());
             return true;
         }else {

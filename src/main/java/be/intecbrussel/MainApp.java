@@ -29,8 +29,8 @@ public class MainApp {
               Person guest3 = new Person("Ana", LocalDate.of(1991, 5, 15), 3, "Sand");
               Person guest4 = new Person("Yana", LocalDate.of(1991, 4, 15), 4, "Rine");
               guestList.add(guest2);
-              guestList.add(guest2);
-              guestList.add(guest2);
+              guestList.add(guest3);
+              guestList.add(guest4);
               personService.addPersons(guestList);
               System.out.println(guestList);
               personService.getAllPersons().stream().forEach(System.out::println);
